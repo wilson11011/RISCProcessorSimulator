@@ -1,3 +1,6 @@
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by Matt on 11/6/2014.
  */
@@ -6,17 +9,24 @@ public class Memory
   private static Memory instance    = null;
   private final  int    MEMORY_SIZE = 32;
   private int[] memory;
+  private List<Integer> instructionMemory = null;
 
   private Memory()
   {
     memory = new int[MEMORY_SIZE];
+    instructionMemory = new ArrayList<Integer>();
     for (int i = 0; i < MEMORY_SIZE; i++)
     {
       memory[i] = 0x00;
     }
   }
 
-  //Singleton to maintain only one RegisterFile
+  public Integer getInstruction(int pc)
+  {
+    return instructionMemory.get(pc);
+  }
+
+  //Singleton to maintain only one Memory
   public Memory getInstance()
   {
     if (instance == null)

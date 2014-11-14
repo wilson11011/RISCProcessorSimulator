@@ -7,6 +7,8 @@ public class RegisterFile
   private final  int          REGISTER_FILE_SIZE = 8;
   private int[] registers;
 
+  private int pc;
+
   private RegisterFile()
   {
     registers = new int[REGISTER_FILE_SIZE];
@@ -50,5 +52,20 @@ public class RegisterFile
                                                ".");
     }
     return registers[index];
+  }
+
+  public int incrementPc()
+  {
+    return ++pc;
+  }
+
+  public int getPc()
+  {
+    return pc;
+  }
+
+  public void setPc(int pc)
+  {
+    this.pc = pc;
   }
 }
