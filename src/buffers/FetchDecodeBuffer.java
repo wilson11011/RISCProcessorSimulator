@@ -2,6 +2,7 @@ package buffers;
 
 public class FetchDecodeBuffer
 {
+  private int instruction;
   private int incrementedPc;
 
   public int readInstruction()
@@ -14,15 +15,15 @@ public class FetchDecodeBuffer
     this.instruction = instruction;
   }
 
-  public int writeIncrementedPc()
+  public int readIncrementedPc()
   {
     return incrementedPc;
   }
 
-  public void readIncrementedPc(int incrementedPc)
+  public void writeIncrementedPc(int incrementedPc)
   {
     this.incrementedPc = incrementedPc;
   }
 
-  private int instruction;
+
 }
