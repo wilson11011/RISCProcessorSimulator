@@ -14,6 +14,7 @@ public class ExecuteMemoryBuffer
   //CONTROL SIGNALS
   //MEM
   private boolean branch;
+  private boolean jump;
   private boolean memWrite;
   private boolean memRead;
 
@@ -119,5 +120,15 @@ public class ExecuteMemoryBuffer
   public void writeRegWrite(boolean regWrite)
   {
     this.regWrite = regWrite;
+  }
+
+  public boolean readJump()
+  {
+    return jump;
+  }
+
+  public void writeJump(boolean jump)
+  {
+    this.jump = jump;
   }
 }

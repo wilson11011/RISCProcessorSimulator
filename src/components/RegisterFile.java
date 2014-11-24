@@ -56,9 +56,9 @@ public class RegisterFile
     return registers[index];
   }
 
-  public int incrementPc()
+  public void writePc(int pc)
   {
-    return ++pc;
+    this.pc = pc;
   }
 
   public int getPc()

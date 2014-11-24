@@ -21,8 +21,10 @@ import stages.WriteBackStage;
 
 public class Cpu
 {
-  private static Memory mem;
+  private static Memory       mem;
   private static RegisterFile reg;
+
+  private static boolean PCSrc = false;
 
   /**
    * get the CPU ready to begin executing instructions
@@ -39,9 +41,11 @@ public class Cpu
 
   /**
    * Start processing instructions
+   *
    * @throws ExecutionException
    * @throws InterruptedException
    */
+  @SuppressWarnings("StatementWithEmptyBody")
   public static void execute() throws ExecutionException, InterruptedException
   {
 
@@ -53,42 +57,77 @@ public class Cpu
     Future<Void> writeBackFuture = null;
 
     //execution is complete when the PC is larger than the number of instructions
-    while(reg.getPc() != mem.getInstructionMemorySize())
-    {
 
+    while (reg.getPc() != mem.getInstructionMemorySize())
+    {
       //Each stage is submitted to the thread pool. The future is then saved and passed to the next
       //thread. This means that the next thread will now wait for the result of previous thread
       // before it executes.
       //The empty while loop is to make sure that thread is not currently executing before
       // executing the next instruction
 
-      while(FetchStage.isRunning()){}
+      //wait for fetch stage to be free
+      while (FetchStage.isRunning())
+      {
+      }
+      //start new fetch stage
       fetchFuture = pool.submit(new FetchStage());
-      while(DecodeStage.isRunning()){}
+
+      //wait for decode stage to be free
+      while (DecodeStage.isRunning())
+      {
+      }
       decodeFuture = pool.submit(new DecodeStage(fetchFuture.get()));
-      while(ExecutionStage.isRunning()){}
+
+      //wait for execution stage to be free
+      while (ExecutionStage.isRunning())
+      {
+      }
+      //start new execution stage
       executeFuture = pool.submit(new ExecutionStage(decodeFuture.get()));
-      while(MemoryStage.isRunning()){}
+
+      //wait for memory stage to be free
+      while (MemoryStage.isRunning())
+      {
+      }
+      //start new memory stage
       memoryFuture = pool.submit(new MemoryStage(executeFuture.get()));
-      while(WriteBackStage.isRunning()){}
+
+      //wait for write back stage to be free
+      while (WriteBackStage.isRunning())
+      {
+      }
+      //start new write back stage
       writeBackFuture = pool.submit(new WriteBackStage(memoryFuture.get()));
       writeBackFuture.get();
     }
   }
 
-  private static ArrayList<Integer> loadInstructions(){
+  private static ArrayList<Integer> loadInstructions()
+  {
 
     ArrayList<Integer> instructions = new ArrayList<Integer>();
     try (BufferedReader br = new BufferedReader(new FileReader("src\\Instructions.code")))
     {
       String line;
-      while ((line = br.readLine()) != null) {
+      while ((line = br.readLine()) != null)
+      {
         instructions.add(Integer.parseInt(line, 2));
       }
-    } catch (IOException e) {
+    } catch (IOException e)
+    {
       e.printStackTrace();
     }
     return instructions;
   }
 
+  public static boolean isPCSrc()
+  {
+    return PCSrc;
+  }
+
+  public static void setPCSrc(boolean PCSrc)
+  {
+    Cpu.PCSrc = PCSrc;
+  }
 }

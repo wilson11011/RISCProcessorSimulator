@@ -10,9 +10,9 @@ public class DecodeExecuteBuffer
   private int regReadValue2;
 
   //instruction [6-3]
-  private short rd;
+  private int rd;
   //instruction [6-9]
-  private short rt;
+  private int rt;
 
   //CONTROL SIGNALS
   //EX
@@ -23,6 +23,7 @@ public class DecodeExecuteBuffer
 
   //MEM
   private boolean branch;
+  private boolean jump;
   private boolean memWrite;
   private boolean memRead;
 
@@ -70,22 +71,22 @@ public class DecodeExecuteBuffer
     this.regReadValue2 = regReadValue2;
   }
 
-  public short readRd()
+  public int readRd()
   {
     return rd;
   }
 
-  public void writeRd(short rd)
+  public void writeRd(int rd)
   {
     this.rd = rd;
   }
 
-  public short readRt()
+  public int readRt()
   {
     return rt;
   }
 
-  public void writeRt(short rt)
+  public void writeRt(int rt)
   {
     this.rt = rt;
   }
@@ -178,5 +179,15 @@ public class DecodeExecuteBuffer
   public void writeRegWrite(boolean regWrite)
   {
     this.regWrite = regWrite;
+  }
+
+  public boolean readJump()
+  {
+    return jump;
+  }
+
+  public void writeJump(boolean jump)
+  {
+    this.jump = jump;
   }
 }
