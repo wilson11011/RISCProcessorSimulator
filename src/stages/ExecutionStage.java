@@ -21,12 +21,12 @@ public class ExecutionStage implements Callable<ExecuteMemoryBuffer>
   {
     running = true;
     //TODO: Implement ExecutionStage
-
+    ExecuteMemoryBuffer outBuffer = ExecuteMemoryBuffer.getInstance();
 
 
 
     running = false;
-    return null;
+    return outBuffer;
   }
 
   public static boolean isRunning()

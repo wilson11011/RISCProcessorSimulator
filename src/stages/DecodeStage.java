@@ -45,7 +45,7 @@ public class DecodeStage implements Callable<DecodeExecuteBuffer>
     int instruction = fetchDecodeBuffer.readInstruction();
 
     //initialize new buffer for Execute stage
-    outBuffer = new DecodeExecuteBuffer();
+    outBuffer = DecodeExecuteBuffer.getInstance();
 
     //get the OPCODE from the instruction
     int opCode = (OPCODE_MASK & instruction) >> 12;
@@ -106,7 +106,7 @@ public class DecodeStage implements Callable<DecodeExecuteBuffer>
     outBuffer.writeRd(rd);
 
     running = false;
-    return null;
+    return outBuffer;
   }
 
   private void setAddiControlSignals()

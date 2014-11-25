@@ -4,6 +4,8 @@ import java.util.concurrent.Callable;
 
 import buffers.ExecuteMemoryBuffer;
 import buffers.MemoryWriteBackBuffer;
+import components.Cpu;
+import components.Memory;
 
 public class MemoryStage implements Callable<MemoryWriteBackBuffer>
 {
@@ -20,13 +22,31 @@ public class MemoryStage implements Callable<MemoryWriteBackBuffer>
   public MemoryWriteBackBuffer call() throws Exception
   {
     running = true;
-    //TODO: Implement MemoryStage
+    MemoryWriteBackBuffer outBuffer = MemoryWriteBackBuffer.getInstance();
 
+    Memory memory = Memory.getInstance();
+    if (executeMemoryBuffer.readMemRead())
+    {
+      //read from the memory location calculated by the ALU
+      outBuffer.writeDataReadFromMemory(memory.getMemory(executeMemoryBuffer.readAluResult()));
+    }
 
+    if (executeMemoryBuffer.readMemWrite())
+    {
+      //write value from register to memory
+      memory.setMemory(executeMemoryBuffer.readAluResult(),
+                       executeMemoryBuffer.readRegReadValue2());
+    }
 
+    //set PCSrc: Branch & ALUZero
+    Cpu.setPCSrc(executeMemoryBuffer.readBranch() && executeMemoryBuffer.readAluZeroResult());
+
+    //pass write back stage signals on
+    outBuffer.writeMemToReg(executeMemoryBuffer.readMemToReg());
+    outBuffer.writeRegWrite(executeMemoryBuffer.readRegWrite());
 
     running = false;
-    return null;
+    return outBuffer;
   }
 
   public static boolean isRunning()

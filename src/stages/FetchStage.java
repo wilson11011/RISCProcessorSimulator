@@ -43,7 +43,7 @@ public class FetchStage implements Callable<FetchDecodeBuffer>
     System.out.println("FET: " + currentPc + "\t\t\t" + String.format("%16s", Integer.toBinaryString
             (instruction)).replace(' ', '0'));
 
-    FetchDecodeBuffer buffer = new FetchDecodeBuffer();
+    FetchDecodeBuffer buffer = FetchDecodeBuffer.getInstance();
 
     buffer.writeInstruction(instruction);
 

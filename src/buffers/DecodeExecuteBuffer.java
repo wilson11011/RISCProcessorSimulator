@@ -1,5 +1,10 @@
 package buffers;
 
+
+/**
+ * The decode stage writes data to the DecodeExecuteBuffer to be read by the execute stage. This
+ * class has been made a singleton to allow for forwarding.
+ */
 public class DecodeExecuteBuffer
 {
   private int incrementedPc;
@@ -30,6 +35,17 @@ public class DecodeExecuteBuffer
   //WB
   private boolean memToReg;
   private boolean regWrite;
+
+  private static DecodeExecuteBuffer instance;
+
+  public static DecodeExecuteBuffer getInstance()
+  {
+    if(instance == null)
+    {
+      instance = new DecodeExecuteBuffer();
+    }
+    return instance;
+  }
 
   public int readIncrementedPc()
   {

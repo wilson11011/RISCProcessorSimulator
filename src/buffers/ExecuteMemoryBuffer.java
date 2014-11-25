@@ -1,11 +1,16 @@
 package buffers;
 
+
+/**
+ * The execute stage writes data to the ExecuteMemoryBuffer to be read by the memory stage.
+ * This class has been made a singleton to allow for forwarding.
+ */
 public class ExecuteMemoryBuffer
 {
   private int incrementedPcWithOffset;
   
   private int aluResult;
-  private int aluZeroResult;
+  private boolean aluZeroResult;
 
   private int regReadValue2;
   
@@ -21,6 +26,17 @@ public class ExecuteMemoryBuffer
   //WB
   private boolean memToReg;
   private boolean regWrite;
+
+  private static ExecuteMemoryBuffer instance;
+
+  public static ExecuteMemoryBuffer getInstance()
+  {
+    if(instance == null)
+    {
+      instance = new ExecuteMemoryBuffer();
+    }
+    return instance;
+  }
 
   public int readIncrementedPcWithOffwrite()
   {
@@ -42,12 +58,12 @@ public class ExecuteMemoryBuffer
     this.aluResult = aluResult;
   }
 
-  public int readAluZeroResult()
+  public boolean readAluZeroResult()
   {
     return aluZeroResult;
   }
 
-  public void writeAluZeroResult(int aluZeroResult)
+  public void writeAluZeroResult(boolean aluZeroResult)
   {
     this.aluZeroResult = aluZeroResult;
   }

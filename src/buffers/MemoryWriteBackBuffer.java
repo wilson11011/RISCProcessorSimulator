@@ -1,5 +1,10 @@
 package buffers;
 
+
+/**
+ * The memory stage writes data to the MemoryWriteBackBuffer to be read by the write back stage.
+ * This class has been made a singleton to allow for forwarding.
+ */
 public class MemoryWriteBackBuffer
 {
   private int dataReadFromMemory;
@@ -10,6 +15,17 @@ public class MemoryWriteBackBuffer
   //WB
   private boolean memToReg;
   private boolean regWrite;
+
+  private static MemoryWriteBackBuffer instance;
+
+  public static MemoryWriteBackBuffer getInstance()
+  {
+    if(instance == null)
+    {
+      instance = new MemoryWriteBackBuffer();
+    }
+    return instance;
+  }
 
   public int readDataReadFromMemory()
   {
@@ -31,22 +47,22 @@ public class MemoryWriteBackBuffer
     this.ALUResult = ALUResult;
   }
 
-  public boolean isMemToReg()
+  public boolean readMemToReg()
   {
     return memToReg;
   }
 
-  public void setMemToReg(boolean memToReg)
+  public void writeMemToReg(boolean memToReg)
   {
     this.memToReg = memToReg;
   }
 
-  public boolean isRegWrite()
+  public boolean readRegWrite()
   {
     return regWrite;
   }
 
-  public void setRegWrite(boolean regWrite)
+  public void writeRegWrite(boolean regWrite)
   {
     this.regWrite = regWrite;
   }
