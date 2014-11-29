@@ -35,7 +35,7 @@ public class ExecutionStage implements Callable<ExecuteMemoryBuffer>
 
     outBuffer.writeIncrementedPcWithOffwrite(incrementedPc);
     //ALU Control
-    int functionCode = decodeExecuteBuffer.readSignExtendedBytes() & 0x0003;
+    int functionCode = decodeExecuteBuffer.readSignExtendedBytes() & 0x0007;
 
     int aluControlInput = Alu.getAluControl(decodeExecuteBuffer.readAluOp2(),
                                             decodeExecuteBuffer.readAluOp1(),
