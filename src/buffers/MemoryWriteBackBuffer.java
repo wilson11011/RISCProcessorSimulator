@@ -42,7 +42,7 @@ public class MemoryWriteBackBuffer
     return ALUResult;
   }
 
-  public void writeALUResult(int ALUResult)
+  public void writeAluResult(int ALUResult)
   {
     this.ALUResult = ALUResult;
   }

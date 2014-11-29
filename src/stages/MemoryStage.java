@@ -24,11 +24,18 @@ public class MemoryStage implements Callable<MemoryWriteBackBuffer>
     running = true;
     MemoryWriteBackBuffer outBuffer = MemoryWriteBackBuffer.getInstance();
 
+    System.out.println("MEM");
+
     Memory memory = Memory.getInstance();
     if (executeMemoryBuffer.readMemRead())
     {
       //read from the memory location calculated by the ALU
       outBuffer.writeDataReadFromMemory(memory.getMemory(executeMemoryBuffer.readAluResult()));
+    }
+    else
+    {
+      //read from "random" memory location
+      outBuffer.writeDataReadFromMemory(0);
     }
 
     if (executeMemoryBuffer.readMemWrite())
@@ -44,6 +51,8 @@ public class MemoryStage implements Callable<MemoryWriteBackBuffer>
     //pass write back stage signals on
     outBuffer.writeMemToReg(executeMemoryBuffer.readMemToReg());
     outBuffer.writeRegWrite(executeMemoryBuffer.readRegWrite());
+    outBuffer.writeAluResult(executeMemoryBuffer.readAluResult());
+    outBuffer.writeDestinationRegisterAddress(executeMemoryBuffer.readDestinationRegisterAddress());
 
     running = false;
     return outBuffer;

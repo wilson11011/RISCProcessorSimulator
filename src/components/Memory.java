@@ -3,22 +3,21 @@ package components;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by Matt on 11/6/2014.
- */
+
 public class Memory
 {
   private static Memory instance    = null;
-  private final  int    MEMORY_SIZE = 32;
+  private final  int    MEMORY_SIZE = 512;
   private int[] memory;
 
   private List<Integer> instructionMemory = null;
 
   private Memory()
   {
-    memory = new int[MEMORY_SIZE];
     instructionMemory = new ArrayList<Integer>();
-    for (int i = 0; i < MEMORY_SIZE; i++)
+
+    memory = new int[MEMORY_SIZE];
+    for (int i = 0; i < MEMORY_SIZE; ++i)
     {
       memory[i] = 0x00;
     }
@@ -53,8 +52,8 @@ public class Memory
   {
     if (index >= MEMORY_SIZE || index < 0)
     {
-      throw new ArrayIndexOutOfBoundsException("Attempting to write to memory that does not exist" +
-                                               ".");
+      throw new ArrayIndexOutOfBoundsException(
+              "Attempting to write to memory that does not exist.");
     }
     memory[index] = value;
   }
@@ -66,6 +65,11 @@ public class Memory
       throw new ArrayIndexOutOfBoundsException("Attempting to read memory that does not exist.");
     }
     return memory[index];
+  }
+
+  public int getMemorySize()
+  {
+    return MEMORY_SIZE;
   }
 
   public int getInstructionMemorySize()

@@ -8,6 +8,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
 
 import buffers.DecodeExecuteBuffer;
 import buffers.ExecuteMemoryBuffer;
@@ -23,6 +24,9 @@ public class Cpu
 {
   private static Memory       mem;
   private static RegisterFile reg;
+
+  private static final String INSTRUCTIONS_FILE = "src\\Instructions.code";
+  private static final String DEBUG_INSTRUCTIONS_FILE = "src\\Test.code";
 
   private static boolean PCSrc = false;
 
@@ -101,13 +105,22 @@ public class Cpu
       writeBackFuture = pool.submit(new WriteBackStage(memoryFuture.get()));
       writeBackFuture.get();
     }
+    pool.shutdown();
+    try
+    {
+      pool.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
+    }catch(InterruptedException e)
+    {
+      e.printStackTrace();
+    }
+
   }
 
   private static ArrayList<Integer> loadInstructions()
   {
 
     ArrayList<Integer> instructions = new ArrayList<Integer>();
-    try (BufferedReader br = new BufferedReader(new FileReader("src\\Instructions.code")))
+    try (BufferedReader br = new BufferedReader(new FileReader(DEBUG_INSTRUCTIONS_FILE)))
     {
       String line;
       while ((line = br.readLine()) != null)

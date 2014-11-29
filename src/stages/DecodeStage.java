@@ -59,8 +59,14 @@ public class DecodeStage implements Callable<DecodeExecuteBuffer>
     {
       //R - Format
       case OPCODE_R_FORMAT_0:
+        setRFormatControlSignals();
+        outBuffer.writeAluOp1(false);
+        outBuffer.writeAluOp0(true);
+        break;
       case OPCODE_R_FORMAT_1:
         setRFormatControlSignals();
+        outBuffer.writeAluOp1(true);
+        outBuffer.writeAluOp0(false);
         break;
       //SW
       case OPCODE_SW:
@@ -113,10 +119,11 @@ public class DecodeStage implements Callable<DecodeExecuteBuffer>
   {
     //RegDst = 0
     outBuffer.writeRegDst(false);
-    //TODO: Define ALUOp
-    //ALUOp1 = ADD
+    //ALUOp2 = 0
+    outBuffer.writeAluOp2(false);
+    //ALUOp1 = 0
     outBuffer.writeAluOp1(false);
-    //ALUOp0 = ADD
+    //ALUOp0 = 0
     outBuffer.writeAluOp0(false);
     //ALUSrc = 1
     outBuffer.writeAluSrc(true);
@@ -130,28 +137,34 @@ public class DecodeStage implements Callable<DecodeExecuteBuffer>
     outBuffer.writeRegWrite(true);
     //MemToReg = 0
     outBuffer.writeMemToReg(false);
+    //Jump = 0
+    outBuffer.writeJump(false);
   }
 
   private void setSltiControlSignals()
   {
-    //RegDst = X
+    //RegDst = 0
     outBuffer.writeRegDst(false);
-    //ALUOp1 = X
+    //ALUOp2 = 0
+    outBuffer.writeAluOp2(false);
+    //ALUOp1 = 1
     outBuffer.writeAluOp1(false);
-    //ALUOp0 = X
+    //ALUOp0 = 0
     outBuffer.writeAluOp0(false);
-    //ALUSrc = X
-    outBuffer.writeAluSrc(false);
+    //ALUSrc = 1
+    outBuffer.writeAluSrc(true);
     //Branch = X
     outBuffer.writeBranch(false);
     //MemRead = 0
     outBuffer.writeMemRead(false);
     //MemWrite = 0
     outBuffer.writeMemWrite(false);
-    //RegWrite = 0
-    outBuffer.writeRegWrite(false);
+    //RegWrite = 1
+    outBuffer.writeRegWrite(true);
     //MemToReg = X
     outBuffer.writeMemToReg(false);
+    //Jump = 0
+    outBuffer.writeJump(false);
   }
 
   private void setJmpControlSignals()
@@ -159,9 +172,11 @@ public class DecodeStage implements Callable<DecodeExecuteBuffer>
     //RegDst = X
     outBuffer.writeRegDst(false);
     //ALUOp1 = X
-    outBuffer.writeAluOp1(false);
+    outBuffer.writeAluOp1(true);
+    //ALUOp1 = X
+    outBuffer.writeAluOp1(true);
     //ALUOp0 = X
-    outBuffer.writeAluOp0(false);
+    outBuffer.writeAluOp0(true);
     //ALUSrc = X
     outBuffer.writeAluSrc(false);
     //Branch = X
@@ -174,13 +189,16 @@ public class DecodeStage implements Callable<DecodeExecuteBuffer>
     outBuffer.writeRegWrite(false);
     //MemToReg = X
     outBuffer.writeMemToReg(false);
+    //Jump = 1
+    outBuffer.writeJump(true);
   }
 
   private void setBeqControlSignals()
   {
     //RegDst = X
     outBuffer.writeRegDst(false);
-    //TODO: Define ALUOp
+    //ALUOp2 = 0
+    outBuffer.writeAluOp2(false);
     //ALUOp1 = 0
     outBuffer.writeAluOp1(false);
     //ALUOp0 = 1
@@ -197,13 +215,16 @@ public class DecodeStage implements Callable<DecodeExecuteBuffer>
     outBuffer.writeRegWrite(false);
     //MemToReg = X
     outBuffer.writeMemToReg(false);
+    //Jump = 0
+    outBuffer.writeJump(false);
   }
 
   private void setLwControlSignals()
   {
     //RegDst = 0
     outBuffer.writeRegDst(false);
-    //TODO: Define ALUOp
+    //ALUOp2 = 0
+    outBuffer.writeAluOp1(false);
     //ALUOp1 = 0
     outBuffer.writeAluOp1(false);
     //ALUOp0 = 0
@@ -220,13 +241,16 @@ public class DecodeStage implements Callable<DecodeExecuteBuffer>
     outBuffer.writeRegWrite(true);
     //MemToReg = 1
     outBuffer.writeMemToReg(true);
+    //Jump = 0
+    outBuffer.writeJump(false);
   }
 
   private void setSwControlSignals()
   {
     //RegDst = X
     outBuffer.writeRegDst(false);
-    //TODO: Define ALUOp
+    //ALUOp2 = 0
+    outBuffer.writeAluOp2(false);
     //ALUOp1 = 0
     outBuffer.writeAluOp1(false);
     //ALUOp0 = 0
@@ -243,6 +267,8 @@ public class DecodeStage implements Callable<DecodeExecuteBuffer>
     outBuffer.writeRegWrite(false);
     //MemToReg = X
     outBuffer.writeMemToReg(false);
+    //Jump = 0
+    outBuffer.writeJump(false);
   }
 
   private void setRFormatControlSignals()
@@ -259,10 +285,10 @@ public class DecodeStage implements Callable<DecodeExecuteBuffer>
     outBuffer.writeMemRead(false);
     //Branch = 0
     outBuffer.writeBranch(false);
-    //ALUOp1 = 1
-    outBuffer.writeAluOp1(true);
-    //ALUOp0 = 0
-    outBuffer.writeAluOp0(false);
+    //ALUOp2 = 1
+    outBuffer.writeAluOp2(true);
+    //Jump = 0
+    outBuffer.writeJump(false);
   }
 
   public static boolean isRunning()

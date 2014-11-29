@@ -1,8 +1,5 @@
 package components;
 
-/**
- * Created by Matt on 11/6/2014.
- */
 public class RegisterFile
 {
   private static RegisterFile instance           = null;
@@ -54,6 +51,11 @@ public class RegisterFile
                                                ".");
     }
     return registers[index];
+  }
+
+  public int getRegisterFileSize()
+  {
+    return REGISTER_FILE_SIZE;
   }
 
   public void writePc(int pc)

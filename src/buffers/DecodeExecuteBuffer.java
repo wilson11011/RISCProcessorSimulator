@@ -24,6 +24,7 @@ public class DecodeExecuteBuffer
   private boolean aluSrc;
   private boolean aluOp0;
   private boolean aluOp1;
+  private boolean aluOp2;
   private boolean regDst;
 
   //MEM
@@ -135,6 +136,16 @@ public class DecodeExecuteBuffer
   public void writeAluOp1(boolean aluOp1)
   {
     this.aluOp1 = aluOp1;
+  }
+
+  public boolean readAluOp2()
+  {
+    return aluOp2;
+  }
+
+  public void writeAluOp2(boolean aluOp2)
+  {
+    this.aluOp2 = aluOp2;
   }
 
   public boolean readRegDst()

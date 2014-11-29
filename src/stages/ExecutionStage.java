@@ -4,7 +4,7 @@ import java.util.concurrent.Callable;
 
 import buffers.DecodeExecuteBuffer;
 import buffers.ExecuteMemoryBuffer;
-import components.ALU;
+import components.Alu;
 
 public class ExecutionStage implements Callable<ExecuteMemoryBuffer>
 {
@@ -24,32 +24,53 @@ public class ExecutionStage implements Callable<ExecuteMemoryBuffer>
     //TODO: Implement ExecutionStage
     ExecuteMemoryBuffer outBuffer = ExecuteMemoryBuffer.getInstance();
 
+    //for testing show which instruction is being executed
+    System.out.println("EXE");
+
     //PC: Need to do offset
     int incrementedPc = decodeExecuteBuffer.readIncrementedPc();
-    
+
     int signExtended = decodeExecuteBuffer.readSignExtendedBytes();
-    incrementedPc = incrementedPc + (signExtended >> 2);
-    
+    incrementedPc = incrementedPc + signExtended;
+
     outBuffer.writeIncrementedPcWithOffwrite(incrementedPc);
     //ALU Control
+    int functionCode = decodeExecuteBuffer.readSignExtendedBytes() & 0x0003;
 
-
-    //Call ALU: need to figure out how to ALUop1 and ALUop2
-    if(decodeExecuteBuffer.readAluSrc()){
-      outBuffer.writeAluResult(ALU.performALU( ,decodeExecuteBuffer.readRegReadValue1(), decodeExecuteBuffer.readSignExtendedBytes));
+    int aluControlInput = Alu.getAluControl(decodeExecuteBuffer.readAluOp2(),
+                                            decodeExecuteBuffer.readAluOp1(),
+                                            decodeExecuteBuffer.readAluOp0(),
+                                            functionCode);
+    if (decodeExecuteBuffer.readAluSrc())
+    {
+      outBuffer.writeAluResult(Alu.performALU(aluControlInput,
+                                              decodeExecuteBuffer.readRegReadValue1(),
+                                              decodeExecuteBuffer.readSignExtendedBytes()));
     }
-    else{
-      outBuffer.writeAluResult(ALU.performALU(, decodeExecuteBuffer.readRegReadValue1(), decodeExecuteBuffer.readRegReadValue1());
+    else
+    {
+      outBuffer.writeAluResult(Alu.performALU(aluControlInput,
+                                              decodeExecuteBuffer.readRegReadValue1(),
+                                              decodeExecuteBuffer.readRegReadValue1()));
     }
 
     //Rt or Rd
-    if(decodeExecuteBuffer.readRegDst()){
+    if (decodeExecuteBuffer.readRegDst())
+    {
       outBuffer.writeDestinationRegisterAddress(decodeExecuteBuffer.readRd());
     }
-    else{
+    else
+    {
       outBuffer.writeDestinationRegisterAddress(decodeExecuteBuffer.readRt());
-      
     }
+
+    outBuffer.writeJump(decodeExecuteBuffer.readJump());
+    outBuffer.writeMemRead(decodeExecuteBuffer.readMemRead());
+    outBuffer.writeMemWrite(decodeExecuteBuffer.readMemWrite());
+
+    outBuffer.writeMemToReg(decodeExecuteBuffer.readMemToReg());
+    outBuffer.writeRegWrite(decodeExecuteBuffer.readRegWrite());
+
     running = false;
     return outBuffer;
   }
