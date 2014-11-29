@@ -102,13 +102,13 @@ public class DecodeStage implements Callable<DecodeExecuteBuffer>
 
     //Read from register file
     RegisterFile registerFile = RegisterFile.getInstance();
-    int rs = (instruction & RS_MASK) >> 9;
+    int rs = (instruction & RS_MASK) >>> 9;
     outBuffer.writeRegReadValue1(registerFile.getRegister(rs));
-    int rt = (instruction & RT_MASK) >> 6;
+    int rt = (instruction & RT_MASK) >>> 6;
     outBuffer.writeRegReadValue2(registerFile.getRegister(rt));
     outBuffer.writeRt(rt);
 
-    int rd = (instruction & RD_MASK) >> 3;
+    int rd = (instruction & RD_MASK) >>> 3;
     outBuffer.writeRd(rd);
 
     running = false;
