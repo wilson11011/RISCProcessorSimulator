@@ -6,7 +6,7 @@ import buffers.DecodeExecuteBuffer;
 import buffers.FetchDecodeBuffer;
 import components.RegisterFile;
 
-public class DecodeStage implements Callable<DecodeExecuteBuffer>
+public class DecodeStage
 {
   private static boolean running = false;
 
@@ -27,19 +27,14 @@ public class DecodeStage implements Callable<DecodeExecuteBuffer>
   private static final int OPCODE_SLTI       = 0b0011;
   private static final int OPCODE_JMP        = 0b1111;
 
+  private static DecodeExecuteBuffer outBuffer ;
 
-  private final FetchDecodeBuffer   fetchDecodeBuffer;
-  private       DecodeExecuteBuffer outBuffer;
 
-  public DecodeStage(FetchDecodeBuffer fetchDecodeBuffer)
-  {
-    this.fetchDecodeBuffer = fetchDecodeBuffer;
-  }
-
-  @Override
-  public DecodeExecuteBuffer call() throws Exception
+  public static void execute()
   {
     running = true;
+    FetchDecodeBuffer   fetchDecodeBuffer = FetchDecodeBuffer.getInstance();
+
 
     //get the instruction word from the buffer
     int instruction = fetchDecodeBuffer.readInstruction();
@@ -94,7 +89,7 @@ public class DecodeStage implements Callable<DecodeExecuteBuffer>
         break;
       //opcode did not match the opcode of a valid instruction
       default:
-        throw new Exception("Invalid instruction!");
+        //throw new Exception("Invalid instruction!");
     }
 
     outBuffer.writeIncrementedPc(fetchDecodeBuffer.readIncrementedPc());
@@ -112,10 +107,9 @@ public class DecodeStage implements Callable<DecodeExecuteBuffer>
     outBuffer.writeRd(rd);
 
     running = false;
-    return outBuffer;
   }
 
-  private void setAddiControlSignals()
+  private static void setAddiControlSignals()
   {
     //RegDst = 0
     outBuffer.writeRegDst(false);
@@ -141,7 +135,7 @@ public class DecodeStage implements Callable<DecodeExecuteBuffer>
     outBuffer.writeJump(false);
   }
 
-  private void setSltiControlSignals()
+  private static void setSltiControlSignals()
   {
     //RegDst = 0
     outBuffer.writeRegDst(false);
@@ -167,7 +161,7 @@ public class DecodeStage implements Callable<DecodeExecuteBuffer>
     outBuffer.writeJump(false);
   }
 
-  private void setJmpControlSignals()
+  private static void setJmpControlSignals()
   {
     //RegDst = X
     outBuffer.writeRegDst(false);
@@ -193,7 +187,7 @@ public class DecodeStage implements Callable<DecodeExecuteBuffer>
     outBuffer.writeJump(true);
   }
 
-  private void setBeqControlSignals()
+  private static void setBeqControlSignals()
   {
     //RegDst = X
     outBuffer.writeRegDst(false);
@@ -219,7 +213,7 @@ public class DecodeStage implements Callable<DecodeExecuteBuffer>
     outBuffer.writeJump(false);
   }
 
-  private void setLwControlSignals()
+  private static void setLwControlSignals()
   {
     //RegDst = 0
     outBuffer.writeRegDst(false);
@@ -245,7 +239,7 @@ public class DecodeStage implements Callable<DecodeExecuteBuffer>
     outBuffer.writeJump(false);
   }
 
-  private void setSwControlSignals()
+  private static void setSwControlSignals()
   {
     //RegDst = X
     outBuffer.writeRegDst(false);
@@ -271,7 +265,7 @@ public class DecodeStage implements Callable<DecodeExecuteBuffer>
     outBuffer.writeJump(false);
   }
 
-  private void setRFormatControlSignals()
+  private static void setRFormatControlSignals()
   {
     //RegDst = 1
     outBuffer.writeRegDst(true);
@@ -300,4 +294,6 @@ public class DecodeStage implements Callable<DecodeExecuteBuffer>
   {
     DecodeStage.running = running;
   }
+
+
 }

@@ -29,17 +29,17 @@ public class RegisterFile
 
   public void setRegister(int index, int value)
   {
-    if (index == 0)
-    {
-      throw new IllegalArgumentException("You cannot change the value of the zero register.");
-    }
+
     if (index >= REGISTER_FILE_SIZE || index < 0)
     {
       throw new ArrayIndexOutOfBoundsException("Attempting to write to register that does not " +
                                                "exist" +
                                                ".");
     }
-    registers[index] = value;
+    if(index != 0)
+    {
+      registers[index] = value;
+    }
   }
 
   public int getRegister(int index)

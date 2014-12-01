@@ -6,22 +6,15 @@ import buffers.DecodeExecuteBuffer;
 import buffers.ExecuteMemoryBuffer;
 import components.Alu;
 
-public class ExecutionStage implements Callable<ExecuteMemoryBuffer>
+public class ExecutionStage
 {
   private static boolean running = false;
 
-  private final DecodeExecuteBuffer decodeExecuteBuffer;
-
-  public ExecutionStage(DecodeExecuteBuffer decodeExecuteBuffer)
-  {
-    this.decodeExecuteBuffer = decodeExecuteBuffer;
-  }
-
-  @Override
-  public ExecuteMemoryBuffer call() throws Exception
+  public static void execute()
   {
     running = true;
-    //TODO: Implement ExecutionStage
+
+    DecodeExecuteBuffer decodeExecuteBuffer = DecodeExecuteBuffer.getInstance();
     ExecuteMemoryBuffer outBuffer = ExecuteMemoryBuffer.getInstance();
 
     //for testing show which instruction is being executed
@@ -54,6 +47,10 @@ public class ExecutionStage implements Callable<ExecuteMemoryBuffer>
                                               decodeExecuteBuffer.readRegReadValue2()));
     }
 
+    //write ALUZero result
+    outBuffer.writeAluZeroResult(outBuffer.readAluResult() == 0);
+
+
     //Rt or Rd
     if (decodeExecuteBuffer.readRegDst())
     {
@@ -67,12 +64,12 @@ public class ExecutionStage implements Callable<ExecuteMemoryBuffer>
     outBuffer.writeJump(decodeExecuteBuffer.readJump());
     outBuffer.writeMemRead(decodeExecuteBuffer.readMemRead());
     outBuffer.writeMemWrite(decodeExecuteBuffer.readMemWrite());
-
+    outBuffer.writeRegReadValue2(decodeExecuteBuffer.readRegReadValue2());
+    outBuffer.writeBranch(decodeExecuteBuffer.readBranch());
     outBuffer.writeMemToReg(decodeExecuteBuffer.readMemToReg());
     outBuffer.writeRegWrite(decodeExecuteBuffer.readRegWrite());
 
     running = false;
-    return outBuffer;
   }
 
   public static boolean isRunning()
@@ -84,4 +81,6 @@ public class ExecutionStage implements Callable<ExecuteMemoryBuffer>
   {
     ExecutionStage.running = running;
   }
+
+
 }

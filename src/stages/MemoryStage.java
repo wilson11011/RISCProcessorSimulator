@@ -7,26 +7,25 @@ import buffers.MemoryWriteBackBuffer;
 import components.Cpu;
 import components.Memory;
 
-public class MemoryStage implements Callable<MemoryWriteBackBuffer>
+public class MemoryStage
 {
   private static boolean running = false;
 
-  private final ExecuteMemoryBuffer executeMemoryBuffer;
+  private static ExecuteMemoryBuffer executeMemoryBuffer;
 
-  public MemoryStage(ExecuteMemoryBuffer executeMemoryBuffer)
-  {
-    this.executeMemoryBuffer = executeMemoryBuffer;
-  }
-
-  @Override
-  public MemoryWriteBackBuffer call() throws Exception
+  public static void execute()
   {
     running = true;
+
+    executeMemoryBuffer = ExecuteMemoryBuffer.getInstance();
     MemoryWriteBackBuffer outBuffer = MemoryWriteBackBuffer.getInstance();
 
     System.out.println("MEM");
 
     Memory memory = Memory.getInstance();
+
+    Cpu.setPCSrc(executeMemoryBuffer.readBranch() && executeMemoryBuffer.readAluZeroResult());
+
     if (executeMemoryBuffer.readMemRead())
     {
       //read from the memory location calculated by the ALU
@@ -55,7 +54,6 @@ public class MemoryStage implements Callable<MemoryWriteBackBuffer>
     outBuffer.writeDestinationRegisterAddress(executeMemoryBuffer.readDestinationRegisterAddress());
 
     running = false;
-    return outBuffer;
   }
 
   public static boolean isRunning()
@@ -67,4 +65,6 @@ public class MemoryStage implements Callable<MemoryWriteBackBuffer>
   {
     MemoryStage.running = running;
   }
+
+
 }

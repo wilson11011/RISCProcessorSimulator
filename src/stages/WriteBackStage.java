@@ -5,26 +5,19 @@ import java.util.concurrent.Callable;
 import buffers.MemoryWriteBackBuffer;
 import components.RegisterFile;
 
-public class WriteBackStage implements Callable<Void>
+public class WriteBackStage
 {
   private static boolean running = false;
 
-  private final MemoryWriteBackBuffer memoryWriteBackBuffer;
-
-  public WriteBackStage(MemoryWriteBackBuffer memoryWriteBackBuffer)
-  {
-    this.memoryWriteBackBuffer = memoryWriteBackBuffer;
-  }
-
-  @Override
-  public Void call() throws Exception
+  public static void execute()
   {
     running = true;
+    MemoryWriteBackBuffer memoryWriteBackBuffer = MemoryWriteBackBuffer.getInstance();
     System.out.println("WB");
-    if(memoryWriteBackBuffer.readRegWrite())
+    if (memoryWriteBackBuffer.readRegWrite())
     {
       RegisterFile registerFile = RegisterFile.getInstance();
-      if(memoryWriteBackBuffer.readMemToReg())
+      if (memoryWriteBackBuffer.readMemToReg())
       {
         //write from memory to register
         registerFile.setRegister(memoryWriteBackBuffer.readDestinationRegisterAddress(),
@@ -38,7 +31,6 @@ public class WriteBackStage implements Callable<Void>
       }
     }
     running = false;
-    return null;
   }
 
   public static boolean isRunning()
@@ -50,4 +42,6 @@ public class WriteBackStage implements Callable<Void>
   {
     WriteBackStage.running = running;
   }
+
+
 }
