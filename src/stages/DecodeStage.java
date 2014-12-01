@@ -166,7 +166,7 @@ public class DecodeStage
     //RegDst = X
     outBuffer.writeRegDst(false);
     //ALUOp1 = X
-    outBuffer.writeAluOp1(true);
+    outBuffer.writeAluOp2(true);
     //ALUOp1 = X
     outBuffer.writeAluOp1(true);
     //ALUOp0 = X
@@ -277,6 +277,8 @@ public class DecodeStage
     outBuffer.writeRegWrite(true);
     //MemWrite = 0
     outBuffer.writeMemRead(false);
+    
+    outBuffer.writeMemWrite(false);
     //Branch = 0
     outBuffer.writeBranch(false);
     //ALUOp2 = 1
