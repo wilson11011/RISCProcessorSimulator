@@ -1,7 +1,5 @@
 package stages;
 
-import java.util.concurrent.Callable;
-
 import buffers.DecodeExecuteBuffer;
 import buffers.ExecuteMemoryBuffer;
 import components.Alu;
@@ -24,9 +22,8 @@ public class ExecutionStage
     int incrementedPc = decodeExecuteBuffer.readIncrementedPc();
 
     int signExtended = decodeExecuteBuffer.readSignExtendedBytes();
-    incrementedPc = incrementedPc + signExtended;
 
-    outBuffer.writeIncrementedPcWithOffwrite(incrementedPc);
+    outBuffer.writeIncrementedPcWithOffset(incrementedPc+signExtended);
     //ALU Control
     int functionCode = decodeExecuteBuffer.readSignExtendedBytes() & 0x0007;
 

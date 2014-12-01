@@ -24,8 +24,6 @@ public class MemoryStage
 
     Memory memory = Memory.getInstance();
 
-    Cpu.setPCSrc(executeMemoryBuffer.readBranch() && executeMemoryBuffer.readAluZeroResult());
-
     if (executeMemoryBuffer.readMemRead())
     {
       //read from the memory location calculated by the ALU

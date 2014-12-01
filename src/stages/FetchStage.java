@@ -1,7 +1,5 @@
 package stages;
 
-import java.util.concurrent.Callable;
-
 import buffers.ExecuteMemoryBuffer;
 import buffers.FetchDecodeBuffer;
 import components.Cpu;
@@ -30,7 +28,7 @@ public class FetchStage
     if(Cpu.isPCSrc())
     {
       ExecuteMemoryBuffer memoryBuffer = ExecuteMemoryBuffer.getInstance();
-      currentPc = memoryBuffer.readAluResult();
+      currentPc = memoryBuffer.readIncrementedPcWithOffset();
     }
 
     int instruction = mem.getInstruction(currentPc);

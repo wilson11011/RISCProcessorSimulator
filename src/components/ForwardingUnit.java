@@ -32,14 +32,17 @@ public class ForwardingUnit
     //MEM/WB hazard
     DecodeExecuteBuffer decodeExecuteBuffer = DecodeExecuteBuffer.getInstance();
     MemoryWriteBackBuffer memoryWriteBackBuffer = MemoryWriteBackBuffer.getInstance();
+    ExecuteMemoryBuffer executeMemoryBuffer = ExecuteMemoryBuffer.getInstance();
     if(memoryWriteBackBuffer.readRegWrite()
        && memoryWriteBackBuffer.readDestinationRegisterAddress() != 0
+       && executeMemoryBuffer.readDestinationRegisterAddress() != decodeExecuteBuffer.readRs()
        && memoryWriteBackBuffer.readDestinationRegisterAddress() == decodeExecuteBuffer.readRs())
     {
       decodeExecuteBuffer.writeRegReadValue1(memoryWriteBackBuffer.readDataReadFromMemory());
     }
     if(memoryWriteBackBuffer.readRegWrite()
        && memoryWriteBackBuffer.readDestinationRegisterAddress() != 0
+       && executeMemoryBuffer.readDestinationRegisterAddress() != decodeExecuteBuffer.readRt()
        && memoryWriteBackBuffer.readDestinationRegisterAddress() == decodeExecuteBuffer.readRt())
     {
       decodeExecuteBuffer.writeRegReadValue2(memoryWriteBackBuffer.readDataReadFromMemory());

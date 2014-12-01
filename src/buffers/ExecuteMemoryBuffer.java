@@ -38,12 +38,12 @@ public class ExecuteMemoryBuffer
     return instance;
   }
 
-  public int readIncrementedPcWithOffwrite()
+  public int readIncrementedPcWithOffset()
   {
     return incrementedPcWithOffset;
   }
 
-  public void writeIncrementedPcWithOffwrite(int incrementedPcWithOffset)
+  public void writeIncrementedPcWithOffset(int incrementedPcWithOffset)
   {
     this.incrementedPcWithOffset = incrementedPcWithOffset;
   }
